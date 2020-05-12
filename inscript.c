@@ -11,7 +11,7 @@ char16_t mappings[28] = {L'α', L'β', L'χ', L'δ', L'ε', L'φ', L'γ', L'η',
 	L'Ι', L'κ', L'λ', L'μ', L'ν', L'ο', L'π', L'Ϙ', L'ρ', L'σ', L'τ', L'υ', L'υ', 
 	L'ω', L'ξ', L'υ', L'ζ', L'ψ', L'θ'};
 
-#ifdef _win32
+#if defined(__WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64) || defined(__MINGW32__) || defined (__MINGW64__) || defined(_MSC_VER)
 size_t getline(char** buf, size_t* n, FILE* file)
 {
 	if(*buf == NULL && *n == 0)

@@ -1,0 +1,43 @@
+name: Linux Build
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  linux:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: make release
+      run: make release
+    - name: compress artifacts
+      run: tar cvf inscript-linux64.tar.bz2 inscript
+    - name: upload artifacts
+      uses: actions/upload-artifact@v2
+      if: ${{ github.event_name == "push" }}
+      with:
+        name: inscript-linux
+        path: inscript-linux64.tar.bz2
+
+  windows:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: make release
+      run: make release
+    - name: rename inscript
+      run: ren inscript.exe
+    - name: compress artifacts
+      run: 7z inscript-win64.zip inscript.exe
+    - name: upload artifacts
+      uses: actions/upload-artifact@v2
+      if: ${{ github.event_name == "push" }}
+      with:
+        name: inscript-windows
+        path: inscript-win64.zip

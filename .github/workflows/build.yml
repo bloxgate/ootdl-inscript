@@ -31,8 +31,6 @@ jobs:
     - uses: actions/checkout@v2
     - name: make release
       run: make release
-    - name: rename inscript
-      run: ren inscript.exe
     - name: compress artifacts
       run: 7z inscript-win64.zip inscript.exe
     - name: upload artifacts

@@ -5,7 +5,6 @@ debug: inscript.c
 	gcc -g -o inscript $<
 
 release: clean inscript
-	strip inscript
 	
 inscript: inscript.c
 

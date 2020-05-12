@@ -19,7 +19,7 @@ jobs:
       run: tar cvf inscript-linux64.tar.bz2 inscript
     - name: upload artifacts
       uses: actions/upload-artifact@v2
-      if: ${{ github.event_name == "push" }}
+      if: ${{ github.event_name == 'push' }}
       with:
         name: inscript-linux
         path: inscript-linux64.tar.bz2
@@ -37,7 +37,7 @@ jobs:
       run: 7z inscript-win64.zip inscript.exe
     - name: upload artifacts
       uses: actions/upload-artifact@v2
-      if: ${{ github.event_name == "push" }}
+      if: ${{ github.event_name == 'push' }}
       with:
         name: inscript-windows
         path: inscript-win64.zip

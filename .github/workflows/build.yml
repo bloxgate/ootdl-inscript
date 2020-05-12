@@ -32,7 +32,7 @@ jobs:
     - name: make release
       run: make release
     - name: compress artifacts
-      run: 7z inscript-win64.zip inscript.exe
+      run: 7z a inscript-win64.zip inscript.exe
     - name: upload artifacts
       uses: actions/upload-artifact@v2
       if: ${{ github.event_name == 'push' }}

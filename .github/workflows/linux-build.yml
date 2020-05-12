@@ -1,0 +1,26 @@
+name: Linux Build
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: make release
+      run: make release
+    - name: mkdir build
+      run: mkdir build/
+    - name: cp inscript
+      run: cp inscript build/
+    - name: Cache
+      uses: actions/cache@v1.1.2
+      with:
+        key: master-build-linux
+        path: build/        

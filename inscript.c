@@ -7,9 +7,9 @@
 #include <string.h>
 #include <uchar.h>
 
-char16_t mappings[28] = {L'α', L'β', L'χ', L'δ', L'ε', L'φ', L'γ', L'η', L'Ι', 
-	L'Ι', L'κ', L'λ', L'μ', L'ν', L'ο', L'π', L'Ϙ', L'ρ', L'σ', L'τ', L'υ', L'υ', 
-	L'ω', L'ξ', L'υ', L'ζ', L'ψ', L'θ'};
+char16_t mappings[28] = {u'α', u'β', u'χ', u'δ', u'ε', u'φ', u'γ', u'η', u'Ι', 
+	u'Ι', u'κ', u'λ', u'μ', u'ν', u'ο', u'π', u'Ϙ', u'ρ', u'σ', u'τ', u'υ', u'υ', 
+	u'ω', u'ξ', u'υ', u'ζ', u'ψ', u'θ'};
 
 #if defined(__WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64) || defined(__MINGW32__) || defined (__MINGW64__) || defined(_MSC_VER)
 size_t getline(char** buf, size_t* n, FILE* file)
@@ -35,8 +35,7 @@ size_t getline(char** buf, size_t* n, FILE* file)
 			(*buf)[i] = '\0';
 			*n = i+1;
 		}
-		return *n;
-	} else {
+	} else if (*n > 0) {
 		char tmp[*n];
 		size_t i = 0;
 		while(i < *n && fread(tmp, sizeof(char), 1, file) > 0)
@@ -58,11 +57,13 @@ size_t getline(char** buf, size_t* n, FILE* file)
 			memcpy(*buf, tmp, sizeof(char) * *n);
 			(*buf)[i - 1] = '\0';
 		}
-		return *n;
 	}
+
+	return *n;
 }
 #endif
 
+mbstate_t mbstate;
 int main(int argc, char* argv[])
 {
 	if (argc < 2 || argc > 3)
@@ -92,7 +93,19 @@ int main(int argc, char* argv[])
 		return EXIT_FAILURE;
 	}
 
-	char* line;
+	char* mbMappings[28];
+	for(int i = 0; i < 28; i++)
+	{
+		mbMappings[i] = malloc(4 * sizeof(char));
+		size_t l = c16rtomb(mbMappings[i], mappings[i], &mbstate);
+		if(l == -1)
+		{
+			perror("Invalid mapping character");
+			return EXIT_FAILURE;
+		}
+	}
+
+	char* line = NULL;
 	size_t lineLen = 0;
 	while(getline(&line, &lineLen, input) > 0)
 	{
@@ -104,21 +117,21 @@ int main(int argc, char* argv[])
 			{
 				if(line[i+1] - 'a' == 18)
 				{
-					fprintf(output, "%lc", mappings[26]);
+					fprintf(output, "%s", mbMappings[26]);
 					i++;
 					continue;
 				}
-				fprintf(output, "%lc", mappings[c]);
+				fprintf(output, "%s", mbMappings[c]);
 			}
 			else if(c == 19 && i < len - 1)
 			{
 				if(line[i+1] - 'a' == 7)
 				{
-					fprintf(output, "%lc", mappings[27]);
+					fprintf(output, "%s", mbMappings[27]);
 					i++;
 					continue;
 				}
-				fprintf(output, "%lc", mappings[c]);
+				fprintf(output, "%s", mbMappings[c]);
 			}
 			else if (c < 0 || c >= 26)
 			{
@@ -126,7 +139,7 @@ int main(int argc, char* argv[])
 			}
 			else 
 			{
-				fprintf(output, "%lc", mappings[c]);				
+				fprintf(output, "%s", mbMappings[c]);				
 			}
 		}
 		lineLen = 0;

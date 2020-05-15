@@ -1,12 +1,8 @@
-CC=gcc
-CFLAGS=-O3
+debug: inscript.go
+	go build -o inscript .
 
-debug: inscript.c
-	gcc -g -o inscript $<
-
-release: clean inscript
-	
-inscript: inscript.c
+release: clean inscript.go
+	go build -ldflags=-w -o inscript .
 
 clean:
 	- rm inscript

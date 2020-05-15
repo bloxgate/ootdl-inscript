@@ -15,14 +15,12 @@ jobs:
     - uses: actions/checkout@v2
     - name: make release
       run: make release
-    - name: compress artifacts
-      run: tar cvf inscript-linux64.tar.bz2 inscript
     - name: upload artifacts
       uses: actions/upload-artifact@v2
       if: ${{ github.event_name == 'push' }}
       with:
         name: inscript-linux
-        path: inscript-linux64.tar.bz2
+        path: inscript
 
   windows:
     runs-on: windows-latest
@@ -31,11 +29,11 @@ jobs:
     - uses: actions/checkout@v2
     - name: make release
       run: make release
-    - name: compress artifacts
-      run: 7z a inscript-win64.zip inscript.exe
+    - name: rename artifacts
+      run: ren inscript inscript.exe
     - name: upload artifacts
       uses: actions/upload-artifact@v2
       if: ${{ github.event_name == 'push' }}
       with:
         name: inscript-windows
-        path: inscript-win64.zip
+        path: inscript.exe

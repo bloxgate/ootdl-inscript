@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"log"
 	"os"
+	"strings"
 )
 
 func main() {
@@ -38,7 +39,7 @@ func main() {
 	bufin := bufio.NewScanner(input)
 	bufout := bufio.NewWriter(output)
 	for bufin.Scan() {
-		line := bufin.Text()
+		line := strings.ToLower(bufin.Text())
 		l := len(line)
 		skipNext := false
 		for p, c := range line {
